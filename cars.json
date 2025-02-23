@@ -1,0 +1,4 @@
+[
+  { "brand": "Toyota", "model": "Corolla", "image": "corolla.png", "length": 4630, "width": 1780 },
+  { "brand": "Honda", "model": "Civic", "image": "civic.png", "length": 4670, "width": 1800 }
+]
