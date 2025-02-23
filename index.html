@@ -15,39 +15,72 @@
 <body>
     <h1>Car Size Comparator</h1>
     <div class="container">
-        <label for="car1">Choose first car:</label>
-        <select id="car1">
-            <option value="car1.png">Car 1</option>
-            <option value="car2.png">Car 2</option>
-        </select>
+        <label for="brand1">Choose first car brand:</label>
+        <select id="brand1"></select>
         
-        <label for="car2">Choose second car:</label>
-        <select id="car2">
-            <option value="car1.png">Car 1</option>
-            <option value="car2.png">Car 2</option>
-        </select>
+        <label for="model1">Choose first car model:</label>
+        <select id="model1"></select>
+
+        <label for="brand2">Choose second car brand:</label>
+        <select id="brand2"></select>
         
+        <label for="model2">Choose second car model:</label>
+        <select id="model2"></select>
+
         <div class="comparison">
-            <img id="image1" src="car1.png" alt="Car 1">
-            <img id="image2" src="car2.png" alt="Car 2" style="opacity: 0.5;">
+            <img id="image1" src="" alt="Car 1">
+            <img id="image2" src="" alt="Car 2" style="opacity: 0.5;">
         </div>
-        
+
         <label for="opacity">Adjust transparency:</label>
         <input type="range" id="opacity" class="slider" min="0" max="100" value="50">
     </div>
-    
+
     <script>
-        document.getElementById("car1").addEventListener("change", function() {
-            document.getElementById("image1").src = this.value;
-        });
-        
-        document.getElementById("car2").addEventListener("change", function() {
-            document.getElementById("image2").src = this.value;
-        });
-        
+        let carsData = [];
+
+        async function loadCars() {
+            const response = await fetch("cars.json");
+            carsData = await response.json();
+            populateBrands();
+        }
+
+        function populateBrands() {
+            const brands = [...new Set(carsData.map(car => car.brand))];
+            brands.forEach(brand => {
+                document.getElementById("brand1").innerHTML += `<option value="${brand}">${brand}</option>`;
+                document.getElementById("brand2").innerHTML += `<option value="${brand}">${brand}</option>`;
+            });
+
+            document.getElementById("brand1").addEventListener("change", () => populateModels("brand1", "model1"));
+            document.getElementById("brand2").addEventListener("change", () => populateModels("brand2", "model2"));
+
+            populateModels("brand1", "model1");
+            populateModels("brand2", "model2");
+        }
+
+        function populateModels(brandId, modelId) {
+            const selectedBrand = document.getElementById(brandId).value;
+            const models = carsData.filter(car => car.brand === selectedBrand);
+            document.getElementById(modelId).innerHTML = "";
+            models.forEach(car => {
+                document.getElementById(modelId).innerHTML += `<option value="${car.image}">${car.model}</option>`;
+            });
+
+            document.getElementById(modelId).addEventListener("change", () => updateImage(modelId, brandId));
+            updateImage(modelId, brandId);
+        }
+
+        function updateImage(modelId, brandId) {
+            const imageId = brandId === "brand1" ? "image1" : "image2";
+            document.getElementById(imageId).src = document.getElementById(modelId).value;
+        }
+
         document.getElementById("opacity").addEventListener("input", function() {
             document.getElementById("image2").style.opacity = this.value / 100;
         });
+
+        loadCars();
     </script>
 </body>
 </html>
