@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Size Comparator</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .container { max-width: 800px; margin: auto; }
+        .comparison { position: relative; width: 100%; height: 400px; }
+        .comparison img { position: absolute; top: 0; left: 50%; transform: translateX(-50%); max-width: 100%; height: auto; }
+        .slider { width: 100%; }
+    </style>
+</head>
+<body>
+    <h1>Car Size Comparator</h1>
+    <div class="container">
+        <label for="car1">Choose first car:</label>
+        <select id="car1">
+            <option value="car1.png">Car 1</option>
+            <option value="car2.png">Car 2</option>
+        </select>
+        
+        <label for="car2">Choose second car:</label>
+        <select id="car2">
+            <option value="car1.png">Car 1</option>
+            <option value="car2.png">Car 2</option>
+        </select>
+        
+        <div class="comparison">
+            <img id="image1" src="car1.png" alt="Car 1">
+            <img id="image2" src="car2.png" alt="Car 2" style="opacity: 0.5;">
+        </div>
+        
+        <label for="opacity">Adjust transparency:</label>
+        <input type="range" id="opacity" class="slider" min="0" max="100" value="50">
+    </div>
+    
+    <script>
+        document.getElementById("car1").addEventListener("change", function() {
+            document.getElementById("image1").src = this.value;
+        });
+        
+        document.getElementById("car2").addEventListener("change", function() {
+            document.getElementById("image2").src = this.value;
+        });
+        
+        document.getElementById("opacity").addEventListener("input", function() {
+            document.getElementById("image2").style.opacity = this.value / 100;
+        });
+    </script>
+</body>
+</html>
